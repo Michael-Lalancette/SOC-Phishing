@@ -1,17 +1,18 @@
-## 🐟 SOC-Phishing-LAB 
-Ce dépôt contient mes analyses personnelles d'e-mails de phishing.  
-
-> 💡 Chaque cas inclut des notes détaillées, des indicateurs de compromission (IOCs) et la méthodologie utilisée.  
+## 🐟 SOC-Phishing
+Dépôt personnel d'analyses d'e‑mails de phishing (cas pratiques, IOCs et méthodologies).  
+> 💡 Chaque cas contient des notes détaillées, les artefacts collectés et un rapport d'analyse.  
 
 ---
 
 ### 🎯 Objectif
-Simuler une enquête SOC centrée sur un **email de phishing** pour pratiquer :  
-- l’analyse d’en-têtes (SPF / DKIM / DMARC / Received),   
-- l’enrichissement OSINT (réputation IP / domaine),    
-- l’analyse des liens et pièces jointes,   
-- l’extraction et le formatage d’IOCs pour le signalement et la mitigation,  
-- la production de rapport.  
+Simuler des enquêtes SOC centrées sur des **e‑mails de phishing** pour développer et documenter des compétences pratiques en :
+- Analyse des en‑têtes (sender IP, Received hops, SPF/DKIM/DMARC)  
+- Recherche de réputation (domaines, IPs, URLs)  
+- Extraction et décodage des liens malveillants (expansion d’URL)  
+- Traitement et hachage des pièces jointes (SHA256 / MD5)  
+- Corrélation des observations avec **MITRE ATT&CK** pour identifier TTPs  
+- Rédaction de rapports d’incident, listing d’IOCs et recommandations de mitigation
+
 
 ---
 
@@ -33,7 +34,7 @@ Simuler une enquête SOC centrée sur un **email de phishing** pour pratiquer :
 ### 📂 Index des cas étudiés
 1. [PhishStrike - OCT25](SOC-Phishing/PhishStrike.md) – Analyse forensique d’un courriel de phishing (fausse facture)
 
-*(La liste sera mise à jour au fur et à mesure que je progresse à travers les exercices)*
+*(Le catalogue s’enrichira régulièrement au fur et à mesure des analyses.)*
 
 
 ---
