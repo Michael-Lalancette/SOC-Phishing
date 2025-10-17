@@ -32,7 +32,7 @@ Simuler des enquêtes SOC centrées sur des **e‑mails de phishing** pour déve
 ---
 
 ### 📂 Index des cas étudiés
-1. [PhishStrike - OCT25](SOC-Phishing/PhishStrike.md) – Analyse forensique d’un courriel de phishing (fausse facture)
+1. [PhishStrike - OCT25](PhishStrike.md) – Analyse forensique d’un courriel de phishing (fausse facture)
 
 *(Le catalogue s’enrichira régulièrement au fur et à mesure des analyses.)*
 
