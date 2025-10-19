@@ -1,17 +1,26 @@
 # 🐟 SOC-Phishing
 Ce dépôt propose des exercices pratiques pour simuler des enquêtes SOC sur des e‑mails de phishing. 
+> 💡 Chaque cas inclut des notes techniques, les artefacts collectés et un rapport reproductible pour faciliter l’apprentissage et le partage d’intelligence.
 
+
+
+---
 
 ## 🎯 Objectif 
 Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de développer et documenter des compétences opérationnelles en :  
-- **Analyse technique des e‑mails** : lecture des en‑têtes, identification des *received hops*, validation SPF/DKIM/DMARC et interprétation des résultats.  
-- **Détection via réputation et OSINT** : recherche et vérification de domaines, IPs et URLs (VirusTotal, AbuseIPDB, Passive DNS, WHOIS).  
-- **Analyse des vecteurs** : expansion des URLs (shorteners), inspection des redirections et extraction des artefacts liés (pages de phishing, téléchargements).  
-- **Gestion des pièces jointes** : identification du type réel, calcul des hachages (SHA256/MD5), analyse statique et dynamique en environnement isolé.  
-- **Contextualisation tactique** : corrélation des observables avec **MITRE ATT&CK** pour classifier les TTPs et prioriser les réponses.  
-- **Production opérationnelle** : rédaction de rapports d’incident clairs et actionnables, listing des IOCs et recommandations de mitigation immédiates (blocage, règles EDR, quarantaine, etc.).
+- **Analyse technique des e‑mails**
+  > Lecture des en‑têtes, identification des *received hops*, validation SPF/DKIM/DMARC et interprétation des résultats.  
+- **Détection via réputation et OSINT**
+  > Recherche et vérification de domaines, IPs et URLs (VirusTotal, AbuseIPDB, Passive DNS, WHOIS).  
+- **Analyse des vecteurs**
+  > Expansion des URLs (shorteners), inspection des redirections et extraction des artefacts liés (pages de phishing, téléchargements).  
+- **Gestion des pièces jointes**
+  > Identification du type réel, calcul des hachages (SHA256/MD5), analyse statique et dynamique en environnement isolé.  
+- **Contextualisation tactique**
+  > Corrélation des observables avec **MITRE ATT&CK** pour classifier les TTPs et prioriser les réponses.  
+- **Production opérationnelle**
+  > Rédaction de rapports d’incident clairs et actionnables, listing des IOCs et recommandations de mitigation immédiates (blocage, règles EDR, quarantaine, etc.).  
 
-> 💡 Chaque cas inclut des notes techniques, les artefacts collectés et un rapport reproductible pour faciliter l’apprentissage et le partage d’intelligence.
 
 
 
@@ -72,7 +81,7 @@ Chacun de ces éléments peut révéler des indices précieux sur l’origine, l
 ---
 
 ### 1️⃣ Analyse des Headers, première ligne de défense
-L’en-tête (header) contient les informations techniques sur la **provenance du message** : serveur d’envoi, adresses, protocoles d’authentification, etc.  
+L’en-tête (header) contient les informations techniques sur la **PROVENANCE** du message : serveur d’envoi, adresses, protocoles d’authentification, etc.  
   > 🎯 But : Valider l'authenticité du chemin d'envoi.  
 
 
@@ -120,10 +129,8 @@ L’analyse des en-têtes constitue une preuve technique robuste : contrairement
 ---
 
 ### 2️⃣ Analyse du corps du message, décoder la manipulation
-Le corps du message révèle les techniques de **social engineering** (ingénierie sociale) employées pour pousser la victime à agir.  
+Le corps du message révèle les techniques de *social engineering (ingénierie sociale)* employées pour pousser la victime à agir.  
   > 🎯 But : détecter l’ingénierie sociale et repérer liens/pièces jointes.  
-  > 💡 Le ton, les formulations et la mise en page donnent souvent de précieux indices!  
-
 
 
 
@@ -180,7 +187,7 @@ Cette étape permet de cartographier la stratégie d’ingénierie sociale (ton,
 Les liens et les pièces jointes sont les deux principaux **vecteurs techniques** utilisés dans les campagnes de phishing.  
 Ils permettent soit de rediriger la victime vers une page piégée, soit de lui faire exécuter directement un code malveillant.  
   > 🎯 But : Identifier le payload et retracer les serveurs/liens utilisés par l’attaquant pour l’attaque.  
-  > ⚠️ Toujours analyser ces éléments dans un environnement isolé (sandbox/VM).  
+  > ⚠️ RAPPEL : Toujours analyser ces éléments dans un environnement isolé (sandbox/VM).  
 
 
 
@@ -229,7 +236,7 @@ L’analyse des liens permet de **cartographier la chaîne d’infection** et de
 ---
 
 ### 📎 Analyse des pièces jointes  
-Les pièces jointes servent souvent à **livrer la charge utile** (payload) : malware, script, macro ou installeur déguisé.  
+Les pièces jointes servent souvent à livrer le payload : malware, script, macro ou installeur déguisé.  
 > 💡 Une analyse minutieuse de leur format et de leur comportement peut révéler la nature de l’attaque.  
 
 
