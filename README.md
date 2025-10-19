@@ -9,19 +9,59 @@ Simuler des enquêtes SOC centrées sur des **e‑mails de phishing** pour déve
 - Analyse des headers/body (sender IP, Received hops, SPF/DKIM/DMARC)  
 - Recherche de réputation (domaines, IPs, URLs)  
 - Extraction et décodage des liens malveillants (expansion d’URL)  
-- Traitement et hachage des pièces jointes (SHA256 / MD5)  
+- Traitement et hachage des pièces jointes (SHA256/MD5)  
 - Corrélation des observations avec **MITRE ATT&CK** pour identifier TTPs  
 - Rédaction de rapports d’incident, listing d’IOCs et recommandations de mitigation
 
 
+
+
+
 ---
 
-## 📧 Méthodologie d’analyse d’un e-mail de phishing
 
+## 🧰 Outils Utilisés
+- **[VMware Workstation Pro](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)**
+  > Hyperviseur pour analyses isolées  
+- **[Any.Run](https://any.run/)**
+  > Sandbox interactive pour observer le comportement des fichiers et liens malveillants  
+- **[CyberChef](https://gchq.github.io/CyberChef/)**
+  > Outils de décodage, décompression et transformation pour extraire IOCs et analyser payloads  
+- **[MITRE ATT&CK](https://attack.mitre.org/)**
+  > Référentiel des tactiques, techniques et procédures (TTP) pour contextualiser les observables  
+- **[URLhaus](https://urlhaus.abuse.ch/)**
+  > Vérification des URLs malveillantes et contexte des campagnes  
+- **[MalwareBazaar](https://bazaar.abuse.ch/)**
+  > Répertoire d’échantillons malware pour identifier des artefacts connus  
+- **[VirusTotal](https://www.virustotal.com/gui/home/url)**
+  > Réputation des fichiers et URLs  
+- **[Malpedia](https://malpedia.caad.fkie.fraunhofer.de/)**
+  > Base de données publique pour identifier les familles de malwares, leurs caractéristiques techniques et comportements  
+
+
+
+
+
+---
+
+## 📂 Index des cas étudiés
+1. [PhishStrike - OCT25](PhishStrike.md) – Analyse forensique d’un courriel de phishing (fausse facture)
+
+*(Le catalogue s’enrichira régulièrement au fur et à mesure des analyses.)*
+
+
+
+
+
+
+
+---
+
+## 📧 Méthodologie d’analyse d’un e-mail de phishing  
 L’analyse d’un email potentiellement frauduleux repose sur trois axes principaux :  
 - 1️⃣ Analyse des **headers**,  
 - 2️⃣ Analyse du **body**,  
-- 3️⃣ Analyse des **pièces jointes**.  
+- 3️⃣ Analyse des **liens et pièces jointes**.  
 
 Chacun de ces éléments peut révéler des indices précieux sur l’origine, les intentions et la dangerosité du message.
 
@@ -32,15 +72,27 @@ Chacun de ces éléments peut révéler des indices précieux sur l’origine, l
 ---
 
 ### 1️⃣ Analyse des Headers, première ligne de défense
-
-L’en-tête (header) contient les informations techniques sur la provenance du message : serveur d’envoi, adresses, protocoles d’authentification, etc.  
-  > 💡 C’est souvent ici que les premiers red flags apparaissent.  
-
+L’en-tête (header) contient les informations techniques sur la **provenance du message** : serveur d’envoi, adresses, protocoles d’authentification, etc.  
+  > 🎯 But : Valider l'authenticité du chemin d'envoi.  
 
 
 
-#### ⚠️ Indicateurs fréquents de phishing
 
+#### ✨ Tips & Tricks
+- Extraire les `Received` hops  
+  > 👉 Du bas (origine) vers le haut (destination) pour comprendre le chemin d’envoi.    
+- Vérifier **SPF/DKIM/DMARC**  
+  > 👉 Examiner `Authentication-Results` pour détecter des échecs/absences.  
+- Contraster les adresses email   
+  > 👉 Comparer `From`, `Return-Path` et `Reply-To` pour repérer une usurpation.  
+- Vérifier l’IP de l’expéditeur   
+  > 👉 IP suspecte ou reverse DNS incohérent == 🚩.    
+
+
+
+
+
+#### ⚠️ Indicateurs fréquents
 - 🚩 Adresses email incohérentes :  
   > Vérifie que l’adresse d’expéditeur correspond au nom et au domaine affichés. Un écart entre ces deux éléments trahit souvent une usurpation.   
 
@@ -50,7 +102,7 @@ L’en-tête (header) contient les informations techniques sur la provenance du 
 - 🚩 Adresse `Reply-To` différente : 
   > Une adresse de réponse différente de celle de l’expéditeur peut rediriger les réponses vers un attaquant.  
   
-- 🚩 Échecs d’authentification (`SPF, DKIM, DMARC`) : 
+- 🚩 Échecs d’**authentification** (`SPF, DKIM, DMARC`) : 
   > Ces mécanismes valident que le message provient bien du domaine revendiqué. Un échec ou une absence de validation indique une possible falsification.  
   
 - 🚩 Faux en-têtes : 
@@ -60,8 +112,7 @@ L’en-tête (header) contient les informations techniques sur la provenance du 
 
 
 #### ✅ Pourquoi c’est important  
-L’analyse des en-têtes permet d’évaluer la fiabilité de la source avant même d’examiner le contenu du message. C’est la première étape de toute investigation.
-
+L’analyse des en-têtes constitue une preuve technique robuste : contrairement au corps du message, ces champs sont partiellement générés automatiquement par les serveurs SMTP et sont donc plus fiables pour retracer la route d’un e-mail.  
 
 
 
@@ -69,17 +120,30 @@ L’analyse des en-têtes permet d’évaluer la fiabilité de la source avant m
 ---
 
 ### 2️⃣ Analyse du corps du message, décoder la manipulation
-
 Le corps du message révèle les techniques de **social engineering** (ingénierie sociale) employées pour pousser la victime à agir.  
-> 💡 Le ton, les formulations et la mise en page donnent souvent de précieux indices!  
+  > 🎯 But : détecter l’ingénierie sociale et repérer liens/pièces jointes.  
+  > 💡 Le ton, les formulations et la mise en page donnent souvent de précieux indices!  
 
 
 
 
-#### ⚠️ Indicateurs fréquents de phishing
+#### ✨ Tips & Tricks
+- Comparer HTML et texte  
+  > 👉 Les liens cachés ou scripts malveillants sont souvent dans le HTML.  
+- Survoler les liens sans cliquer  
+  > 👉 Pour vérifier qu’ils correspondent au texte affiché.  
+- Identifier les mots-clés d’urgence  
+  > 👉 `urgent`, `verify`, `invoice`, `payment`, `account suspension`.  
+- Vérifier images externes/tracking  
+  > 👉 `<img src=` peut révéler des pixels de suivi ou exfiltration.  
+  
 
+
+
+
+#### ⚠️ Indicateurs fréquents
 - 🚩 Langage urgent ou menaçant :
-  > Les messages qui créent un **sentiment d’urgence** (`Votre compte sera suspendu !!!`) cherchent à provoquer une réaction impulsive. 
+  > Les messages qui créent un **sentiment d’urgence** - `Votre compte sera suspendu !!!` - cherchent à provoquer une réaction impulsive. 
 
 - 🚩 Demandes d’informations sensibles :
   > Les organisations sérieuses ne demandent **jamais** de mots de passe, numéros de carte ou informations personnelles par e-mail.  
@@ -103,8 +167,7 @@ Le corps du message révèle les techniques de **social engineering** (ingénier
 
 
 #### ✅ Pourquoi c’est important  
-Les signes linguistiques et visuels révèlent les intentions de l’attaquant et les leviers psychologiques utilisés.  
-L’analyse du corps permet de détecter la tentative d’ingénierie sociale avant toute exécution technique.
+Cette étape permet de cartographier la stratégie d’ingénierie sociale (ton, urgence, promesse, peur, curiosité). Les leviers psychologiques sont souvent plus révélateurs que la technique utilisée.  
 
 
 
@@ -112,41 +175,52 @@ L’analyse du corps permet de détecter la tentative d’ingénierie sociale av
 
 ---
 
-### 3️⃣ Analyse des pièces jointes, le vecteur d’infection
+### 3️⃣ Analyse des liens et pièces jointes, vecteurs d’infection
 
-Les pièces jointes sont souvent le **vecteur d’infection** : scripts, exécutables, macros ou archives contenant des malwares.  
-> 💡 Elles doivent être examinées avec une extrême prudence (sandbox/environnement isolé).  
+Les liens et les pièces jointes sont les deux principaux **vecteurs techniques** utilisés dans les campagnes de phishing.  
+Ils permettent soit de rediriger la victime vers une page piégée, soit de lui faire exécuter directement un code malveillant.  
+  > 🎯 But : Identifier le payload et retracer les serveurs/liens utilisés par l’attaquant pour l’attaque.  
+  > ⚠️ Toujours analyser ces éléments dans un environnement isolé (sandbox/VM).  
 
 
 
 
-#### ⚠️ Indicateurs fréquents de phishing
 
-- 🚩 Types de fichiers dangereux :  
-  > Méfie-toi des extensions `.exe`, `.scr`, `.zip` ou `.rar`. Ces formats sont couramment utilisés pour propager des malwares.  
+---
 
-- 🚩 Noms de fichiers trompeurs :  
-  > Des fichiers comme `Facture.pdf.exe` cherchent à duper la victime par double extension.  
-  
-- 🚩 Extensions multiples :  
-  > Les fichiers à double extension sont une technique classique de dissimulation.  
-  
-- 🚩 Taille ou contenu incohérents :  
-  > Un fichier volumineux ou sans rapport avec le sujet du message est suspect.  
-  
-- 🚩 Fichiers non sollicités :  
-  > Une pièce jointe inattendue d’un expéditeur inconnu ou un message qui insiste pour qu’on l’ouvre sont des signaux d’alerte.  
-  
-- 🚩 Archives protégées par mot de passe :  
-  > Les attaquants utilisent parfois des fichiers `.zip` protégés pour contourner les antivirus. Si le mot de passe est donné dans l’email, méfiance maximale.  
+### 🔗 Analyse des liens
+Un lien malveillant peut rediriger vers un faux site de connexion, un téléchargement de malware ou une infrastructure C2.   
+> 💡 Les cybercriminels utilisent souvent des domaines compromis, des raccourcisseurs d’URL ou des adresses IP brutes.  
+
+
+
+
+#### ✨ Tips & Tricks
+- Ne jamais cliquer directement  
+  > 👉 Utiliser un service d’expansion d’URL (`unshorten.it`) ou ouvrir le lien dans une sandbox/VM isolée.   
+- Analyser la réputation de l’URL  
+  > 👉 Via `VirusTotal`, `URLhaus` ou `PhishTool` (noter le nombre de détections).  
+- Vérifier le certificat SSL/TLS (nom de domaine, validité, autorité).
+  > 👉 Les certificats auto-signés ou mismatched sont suspects.  
+- Chercher des patterns suspects  
+  > 👉 IP sans domaine, noms trompeurs (ex. `login-update-secure.com`), redirections en chaîne.    
+
+
+
+
+#### ⚠️ Indicateurs fréquents
+- 🚩 URL raccourcie ou masquée (`bit.ly`, `tinyurl`, etc.)  
+- 🚩 Domaine récemment créé ou sans enregistrement WHOIS valide.  
+- 🚩 Page hébergée sur IP brute (`http://185.203.116[.]55/invoice`).  
+- 🚩 Domaine ressemblant à un vrai service (`micros0ft-support.com`).  
+- 🚩 Présence d’un téléchargement automatique ou d’un fichier exécutable.
 
 
 
 
 
 #### ✅ Pourquoi c’est important  
-L’analyse des pièces jointes permet d’identifier la charge utile potentielle d’un phishing et d’éviter une compromission directe du poste de travail.
-
+L’analyse des liens permet de **cartographier la chaîne d’infection** et de remonter vers l’infrastructure malveillante (hébergeur, C2, campagnes similaires).
 
 
 
@@ -154,25 +228,48 @@ L’analyse des pièces jointes permet d’identifier la charge utile potentiell
 
 ---
 
-
-## 🧰 Outils Utilisés
-- **[VMware Workstation Pro](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)** – Hyperviseur pour analyses isolées  
-- **[Any.Run](https://any.run/)** – Sandbox interactive pour observer le comportement des fichiers et liens malveillants  
-- **[CyberChef](https://gchq.github.io/CyberChef/)** – Outils de décodage, décompression et transformation pour extraire IOCs et analyser payloads  
-- **[MITRE ATT&CK](https://attack.mitre.org/)** – Référentiel des tactiques, techniques et procédures (TTP) pour contextualiser les observables
-- **[URLhaus](https://urlhaus.abuse.ch/)** – Vérification des URLs malveillantes et contexte des campagnes  
-- **[MalwareBazaar](https://bazaar.abuse.ch/)** – Répertoire d’échantillons malware pour identifier des artefacts connus  
-- **[VirusTotal](https://www.virustotal.com/gui/home/url)** – Réputation des fichiers et URLs (agrégateur multi-source)  
-- **OSINT général** – Recherche d’informations publiques sur IP, domaines, URLs, emails et infrastructures (AbuseIPDB, WHOIS, Passive DNS, Shodan)
+### 📎 Analyse des pièces jointes  
+Les pièces jointes servent souvent à **livrer la charge utile** (payload) : malware, script, macro ou installeur déguisé.  
+> 💡 Une analyse minutieuse de leur format et de leur comportement peut révéler la nature de l’attaque.  
 
 
 
----
 
-## 📂 Index des cas étudiés
-1. [PhishStrike - OCT25](PhishStrike.md) – Analyse forensique d’un courriel de phishing (fausse facture)
 
-*(Le catalogue s’enrichira régulièrement au fur et à mesure des analyses.)*
+
+#### ✨ Tips & Tricks
+- Calculer le hash (SHA256, MD5) du fichier avant ouverture  
+  > 👉 `sha256sum fichier` pour vérifier sa réputation sur `VirusTotal` ou `MalwareBazaar`.  
+- Vérifier le type réel du fichier  
+  > 👉 `file fichier` (ex. un `.pdf` déguisé en `.exe`).  
+- Analyser macros Office  
+  > 👉 `olevba` ou `oledump` pour extraire et comprendre les macros malveillantes.  
+- Tester en sandbox  
+  > 👉 Any.Run, Hybrid Analysis ou VM isolée pour observer le comportement.  
+- Méfiance avec archives protégées par mot de passe  
+  > 👉 Souvent utilisées pour contourner les antivirus.   
+
+
+
+
+
+
+#### ⚠️ Indicateurs fréquents
+- 🚩 Extensions multiples : `Facture.pdf.exe`, `Reçu.docx.js`.  
+- 🚩 Formats dangereux : `.exe`, `.scr`, `.vbs`, `.zip`, `.rar`.  
+- 🚩 Taille ou contenu incohérents avec le contexte du mail.  
+- 🚩 Pièce jointe inattendue ou non sollicitée.  
+- 🚩 Archive protégée par mot de passe dont le code est donné dans le message.  
+
+
+
+
+
+
+#### ✅ Pourquoi c’est important  
+Les pièces jointes représentent la **porte d’entrée directe du malware**.  
+Les analyser, c’est comprendre le vecteur initial de compromission et prévenir la propagation future dans le SI.  
+
 
 
 ---
