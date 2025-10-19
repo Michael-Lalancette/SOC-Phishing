@@ -6,7 +6,7 @@ Dépôt personnel d'analyses d'e‑mails de phishing (cas pratiques, IOCs et mé
 
 ## 🎯 Objectif
 Simuler des enquêtes SOC centrées sur des **e‑mails de phishing** pour développer et documenter des compétences pratiques en :
-- Analyse des en‑têtes (sender IP, Received hops, SPF/DKIM/DMARC)  
+- Analyse des headers/body (sender IP, Received hops, SPF/DKIM/DMARC)  
 - Recherche de réputation (domaines, IPs, URLs)  
 - Extraction et décodage des liens malveillants (expansion d’URL)  
 - Traitement et hachage des pièces jointes (SHA256 / MD5)  
@@ -16,11 +16,11 @@ Simuler des enquêtes SOC centrées sur des **e‑mails de phishing** pour déve
 
 ---
 
-## 📧 Méthodologie d’analyse d’un email de phishing
+## 📧 Méthodologie d’analyse d’un e-mail de phishing
 
 L’analyse d’un email potentiellement frauduleux repose sur trois axes principaux :  
-- 1️⃣ Analyse des **Headers**,  
-- 2️⃣ Analyse du **Body**,  
+- 1️⃣ Analyse des **headers**,  
+- 2️⃣ Analyse du **body**,  
 - 3️⃣ Analyse des **pièces jointes**.  
 
 Chacun de ces éléments peut révéler des indices précieux sur l’origine, les intentions et la dangerosité du message.
