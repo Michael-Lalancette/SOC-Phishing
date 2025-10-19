@@ -238,15 +238,15 @@ Les pièces jointes servent souvent à **livrer la charge utile** (payload) : ma
 
 
 #### ✨ Tips & Tricks
-- Calculer le hash (SHA256, MD5) du fichier avant ouverture  
+- Calculer le hash (*SHA256, MD5*) du fichier avant ouverture  
   > 👉 `sha256sum fichier` pour vérifier sa réputation sur `VirusTotal` ou `MalwareBazaar`.  
 - Vérifier le type réel du fichier  
   > 👉 `file fichier` (ex. un `.pdf` déguisé en `.exe`).  
 - Analyser macros Office  
   > 👉 `olevba` ou `oledump` pour extraire et comprendre les macros malveillantes.  
-- Tester en sandbox  
+- Tester en sandbox lorsque nécessaire  
   > 👉 Any.Run, Hybrid Analysis ou VM isolée pour observer le comportement.  
-- Méfiance avec archives protégées par mot de passe  
+- Méfiance avec archives (zip) protégées par mot de passe  
   > 👉 Souvent utilisées pour contourner les antivirus.   
 
 
@@ -259,7 +259,7 @@ Les pièces jointes servent souvent à **livrer la charge utile** (payload) : ma
 - 🚩 Formats dangereux : `.exe`, `.scr`, `.vbs`, `.zip`, `.rar`.  
 - 🚩 Taille ou contenu incohérents avec le contexte du mail.  
 - 🚩 Pièce jointe inattendue ou non sollicitée.  
-- 🚩 Archive protégée par mot de passe dont le code est donné dans le message.  
+- 🚩 Archive protégée par mot de passe dont le code/mot de passe est donné dans le message.  
 
 
 
