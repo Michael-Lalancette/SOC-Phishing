@@ -1,17 +1,17 @@
 # 🐟 SOC-Phishing
-Dépôt personnel d'analyses d'e‑mails de phishing (cas pratiques, IOCs et méthodologies).  
-> 💡 Chaque cas contient des notes détaillées, les artefacts collectés et un rapport d'analyse.  
+Ce dépôt propose des exercices pratiques pour simuler des enquêtes SOC sur des e‑mails de phishing. 
 
----
 
-## 🎯 Objectif
-Simuler des enquêtes SOC centrées sur des **e‑mails de phishing** pour développer et documenter des compétences pratiques en :
-- Analyse des headers/body (sender IP, Received hops, SPF/DKIM/DMARC)  
-- Recherche de réputation (domaines, IPs, URLs)  
-- Extraction et décodage des liens malveillants (expansion d’URL)  
-- Traitement et hachage des pièces jointes (SHA256/MD5)  
-- Corrélation des observations avec **MITRE ATT&CK** pour identifier TTPs  
-- Rédaction de rapports d’incident, listing d’IOCs et recommandations de mitigation
+## 🎯 Objectif 
+Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de développer et documenter des compétences opérationnelles en :  
+- **Analyse technique des e‑mails** : lecture des en‑têtes, identification des *received hops*, validation SPF/DKIM/DMARC et interprétation des résultats.  
+- **Détection via réputation et OSINT** : recherche et vérification de domaines, IPs et URLs (VirusTotal, AbuseIPDB, Passive DNS, WHOIS).  
+- **Analyse des vecteurs** : expansion des URLs (shorteners), inspection des redirections et extraction des artefacts liés (pages de phishing, téléchargements).  
+- **Gestion des pièces jointes** : identification du type réel, calcul des hachages (SHA256/MD5), analyse statique et dynamique en environnement isolé.  
+- **Contextualisation tactique** : corrélation des observables avec **MITRE ATT&CK** pour classifier les TTPs et prioriser les réponses.  
+- **Production opérationnelle** : rédaction de rapports d’incident clairs et actionnables, listing des IOCs et recommandations de mitigation immédiates (blocage, règles EDR, quarantaine, etc.).
+
+> 💡 Chaque cas inclut des notes techniques, les artefacts collectés et un rapport reproductible pour faciliter l’apprentissage et le partage d’intelligence.
 
 
 
