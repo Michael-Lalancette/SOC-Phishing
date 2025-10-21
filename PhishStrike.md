@@ -9,52 +9,92 @@ Exercice d’investigation d’un e-mail suspect reçu par un membre du corps en
 
 
 
-
----
-
-## 🔎 Étape 1 — Analyse des headers
-- **SPF** : Soft fail (`~all`) → le domaine d’envoi n’est pas autorisé à utiliser cette adresse IP.  
-- **IP source** : hébergée sur **Amazon AWS**, infrastructure fréquemment exploitée par des acteurs malveillants pour se fondre dans le trafic légitime.  
-- **Return-Path** : non conforme au domaine d’expéditeur affiché.  
-- **DKIM / DMARC** : signatures absentes ou invalides.  
-
-➡️ **Hypothèse initiale :** usurpation d’identité via un serveur cloud ; probable campagne de phishing ciblée.
-
+![thunderbird-1](./images/thunderbird-1.png)
 
 
 
 ---
 
-## 🌐 Étape 2 — Réputation du domaine et de l’adresse IP
-Recoupement effectué via **VirusTotal**, **Abuse.ch (URLhaus)** et **AlienVault OTX** :  
-- L’adresse IP d’origine est **signalée comme malveillante** par plusieurs moteurs.  
-- Corrélation avec des **campagnes RAT** connues (AsyncRAT, BitRAT).  
-- Activité réseau associée à des **serveurs C2** déjà répertoriés.  
+## 1️⃣ Analyse des headers
 
-➡️ **Confirmation :** infrastructure de malware active dissimulée derrière une apparence commerciale.
+#### 🌐 Received Hops :  
+- Message prétendument envoyé depuis `uptc[.]edu[.]co` (Google relay `209[.]85[.]221[.]65`).  
+- Filtré par Trend Micro (AWS `18[.]208[.]22[.]104` – AS14618 Amazon-AES).  
+- Relayé via Microsoft Exchange Online puis transféré à Google (`mail-wr1-f65[.]google[.]com`).  
+- Livraison finale à `servicios[.]informaticos@fsfb[.]org[.]co` (Google Workspace).  
 
+#### 📧 Alignement `Return-Path`/`From`
+- From : `erikajohana[.]lopez@uptc[.]edu[.]co`  
+- Return-Path : `erikajohana[.]lopez@uptc[.]edu[.]co`  
+  > 💡 Alignement correct : même domaine, donnant l’apparence d’un message légitime.  
 
+#### 🧪 Résultats d’authentification
+- 🚩 SPF : `softfail` → le domaine d’envoi n’autorise pas l’adresse IP utilisée.  
+- 🚩 DKIM : `none` → aucune signature valide détectée.     
+- 🚩 DMARC : `none` → aucune politique publiée pour le domaine.  
+![header-1](./images/header-1.png)  
+> ⚠️ Forte probabilité de spoofing : absence totale d’authentification valide, origine réelle identifiée sur un serveur AWS non autorisé (AS14618).  
 
-
-
----
-
-## 📎 Étape 3 — Analyse du contenu et des liens
-Le courriel contient un lien intitulé **“Invoice #625000”** pointant vers **une adresse IP brute** sans domaine — pratique typique d’un phishing de masse.  
-
-Analyse dynamique du lien :  
-- Téléchargement d’un exécutable se présentant comme un **fichier PDF**.  
-- Détection d’activités liées à **AsyncRAT**, **BitRAT** et un **module CoinMiner**.  
-- Exécution → prise de contrôle distante et vol potentiel de données utilisateur.  
-
-➡️**Risque :** compromission complète du poste par un simple clic.
 
 
 
 
 ---
 
-## ☣️ Étape 4 — Analyse comportementale du malware
+## 2️⃣ Analyse du contenu du message (body)
+
+#### 🕵️‍♂️ Contenu observé
+- Sujet : *Commercial Purchase Receipt*  
+- Texte : annonce une transaction de 625,000 pesos, avec une invitation à "voir la facture".  
+- Lien : `http[:]//107[.]175[.]247[.]199/loader/install[.]exe` → tous les éléments "cliquables" mènent à ce lien malveillant.  
+- Code d’accès : `8657`  
+  > 💡 Le message inclut un `ACCESS CODE` censé protéger le document, ce qui renforce artificiellement sa crédibilité. Cette pratique est typique des campagnes de phishing visant à pousser l’utilisateur à exécuter un fichier malveillant.  
+
+
+
+---
+
+## 3️⃣ Analyse des liens et pièces jointes
+Le courriel contient un lien intitulé "Invoice #625000" pointant vers une adresse IP raw (sans domaine) : `107[.]175[.]247[.]199`.  
+> 💡 Pratique typique d’un phishing de masse.
+
+
+
+
+#### 🔎 Analyse Statique
+- Analyse de l'adresse IP du lien dans VirusTotal :  
+  ![osint-1](./images/osint-1.png)
+
+- Analyse du lien complet dans URLhaus (Abuse.ch) :
+  ![osint-2](./images/osint-2.png)
+
+- URL observée : `http[:]//107[.]175[.]247[.]199/loader/install[.]exe` — listée sur **URLhaus**.  
+- IP `107[.]175[.]247[.]199` : présence historique de domaines liés (ex. `ripley[.]studio`) ; plusieurs échantillons associés avec détections élevées sur VT.  
+- Types identifiés : `BitRat`, `AsyncRAT`, `CoinMiner`  
+  - `BitRAT` 
+    > 💡 RAT commercialisé sur des forums clandestins ; permet exfiltration de données, keylogging, contrôle de la webcam et peut être utilisé pour lancer du minage de cryptomonnaie.  
+  *[Source (Malpedia)](https://malpedia.caad.fkie.fraunhofer.de/details/win.bit_rat)*  
+
+  - `AsyncRAT`  
+    > 💡 Outil d’accès à distance open-source souvent détourné à des fins malveillantes ; offre contrôle à distance, exécution de commandes, keylogging et exfiltration via un canal C2 chiffré.  
+  *[Source (Malpedia)](https://malpedia.caad.fkie.fraunhofer.de/details/win.asyncrat)*   
+
+  - `CoinMiner`  
+    > 💡 Malware qui utilise les ressources CPU/GPU de la machine infectée pour miner des cryptomonnaies (ex. Monero) à l’insu du propriétaire.  
+  *[Source (Malpedia)](https://malpedia.caad.fkie.fraunhofer.de/details/win.coinminer)*  
+
+
+
+
+#### 🔬 Analyse dynamique
+- En sandbox : téléchargement de payloads supplémentaires, création de fichiers sous `%APPDATA%`, tentative de persistence (clé `Run`), connexions sortantes vers C2.
+- Comportement : loader → download & exécution de RATs/miners. Risque élevé de compromission persistante ou minage illicit.
+
+
+
+
+
+
 Les rapports **Any.Run** et **Hybrid Analysis** indiquent :  
 - **Persistance** : ajout d’une clé registre  
   `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\{Random}`  
@@ -62,6 +102,7 @@ Les rapports **Any.Run** et **Hybrid Analysis** indiquent :
 - **Communication C2** : utilisation de **Telegram Bot API** (identifiant AsyncRAT).  
 
 ➡️ **Comportement typique d’un RAT** cherchant à conserver un accès persistant et discret.
+
 
 
 
