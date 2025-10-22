@@ -267,7 +267,7 @@ Les pièces jointes représentent la **porte d'entrée directe du malware** dans
 
 ## ⚠️ Disclaimer
 
-> **Avertissement légal** : Ce guide est uniquement destiné à des fins éducatives, de formation et d'amélioration de la posture de sécurité. Ne reproduisez pas ces techniques sur des systèmes en production ou sans autorisation explicite. Tous les fichiers, liens et artefacts suspects doivent être manipulés exclusivement dans un environnement isolé et sécurisé (sandbox/VM déconnectée). L'analyse de phishing doit être effectuée par du personnel qualifié en respectant les procédures de l'organisation et la réglementation en vigueur.
+> **Avertissement légal** : Ce laboratoire est uniquement destiné à des fins éducatives et de formation. Ne reproduisez pas ces techniques sur des systèmes en production ou sans autorisation explicite. Tous les fichiers, liens et artefacts doivent être manipulés dans un environnement isolé et sécurisé.
 
 
 *Dernière mise à jour : Octobre 2025*
