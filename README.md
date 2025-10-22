@@ -84,12 +84,12 @@ SOC-Phishing/
 ├── README.md                    # Ce fichier
 ├── Guide-Analyse-Phishing.md    # Méthodologie complète d'analyse
 ├── Templates/                   # Modèles de rapports et checklists
-│   ├── Rapport-Incident.md
-├── Cases/                       # Études de cas
+│   ├── Rapport-Template.md
+├── Cas/                         # Études de cas
 │   ├── PhishStrike/
-│   │   ├── README.md           # Rapport d'analyse
-│   │   ├── iocs.txt            # Liste des IoCs
-│   │   └── screenshots/        # Captures d'écran annotées
+│   │   ├── README.md            # Rapport d'analyse
+│   │   ├── RAPPORT.md           # Rapport SOC
+│   │   └── images/              # Répertoire d'images
 │   └── [Futurs cas...]
 ```
 
