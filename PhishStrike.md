@@ -28,7 +28,7 @@ Exercice d’investigation d’un e-mail suspect reçu par un membre du corps en
 #### Alignement `Return-Path`/`From`
 - From : `erikajohana[.]lopez@uptc[.]edu[.]co`  
 - Return-Path : `erikajohana[.]lopez@uptc[.]edu[.]co`  
-> 💡 Alignement légitime, cet alignement peut cependant être facilement usurpé en l’absence de signatures cryptographiques (`DKIM`/`DMARC`). 
+> 💡 Alignement légitime, cet alignement peut cependant être facilement usurpé en l’absence de signatures `DKIM`/`DMARC`. 
 
 ---
 
@@ -64,12 +64,12 @@ Il incite le destinataire à consulter une `"invoice document"` via un lien exte
 ---
 
 #### IOCs :  
-  - Type de ressource : Fichier binaire `.exe`  
+  - Type : `.exe`  
   - Hôte : `107[.]175[.]247[.]199`  
   - Port utilisé : `80` (HTTP non sécurisé)  
   - URL : `http[:]//107[.]175[.]247[.]199/loader/install[.]exe`  
   - Code d’accès : `8657` (leurre de légitimité)  
-  - ASN : AS-COLOCROSSING (hébergeur souvent observé dans campagnes malveillantes)  
+  - ASN : `AS-COLOCROSSING` (hébergeur souvent observé dans campagnes malveillantes)  
 
 
 ---
@@ -87,7 +87,7 @@ Il incite le destinataire à consulter une `"invoice document"` via un lien exte
 >
 > Son rôle attendu serait :  
 > - Télécharger un 2e payload depuis un serveur distant.  
-> - Installer un trojan bancaire, un infostealer (ex. AgentTesla, FormBook) ou un RAT (Remote Access Trojan).  
+> - Installer un trojan bancaire, un infostealer ou un RAT (Remote Access Trojan).  
 > - Établir une persistance locale sur la machine victime.   
 
 
@@ -104,7 +104,7 @@ IP observé : `107[.]175[.]247[.]199`
 
 #### VirusTotal :  
 - IP `107[.]175[.]247[.]199` :
-  > 💡 IP associée à plusieurs domaines éphémères (ex. `ripley[.]studio`) et à plusieurs fichiers `.exe` avec détections élevées (voir image).  
+  > 💡 IP associée à plusieurs domaines éphémères (ex. `ripley[.]studio`) et à plusieurs fichiers `.exe` avec détections élevées.    
   ![osint-1](./images/osint-1.png)
 
 
@@ -134,8 +134,10 @@ IP observé : `107[.]175[.]247[.]199`
 ### Analyse dynamique
 > 💡 N.B. : Puisque le domaine est maintenant inactif depuis 12/02/2022, je vais utiliser un rapport JoeSandbox pour guider mon analyse dynamique.
 
-Comportement observé en sandbox
+Comportement observé en sandbox du CoinMiner
+*[Source (JoeSandbox)](https://malpedia.caad.fkie.fraunhofer.de/details/win.coinminer)*  
 - Téléchargement du binaire install.exe (souvent initié par chrome.exe).
+- 
 - Exécution et dépôt de binaires secondaires dans %APPDATA%, %TEMP%.
 - Tentatives de persistance via clés HKCU\Software\Microsoft\Windows\CurrentVersion\Run ou équivalentes.
 - Création de processus enfants multiples et injectés.
