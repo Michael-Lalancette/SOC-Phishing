@@ -12,7 +12,7 @@
 
 Le 9 décembre 2022, une alerte de sécurité a signalé un e-mail de phishing ciblant des membres du corps professoral. L'attaquant a usurpé l'identité d'un contact académique légitime (`erikajohana.lopez@uptc.edu.co`) en exploitant l'absence de politique DMARC stricte.  
 
-Le message prétendait signaler une transaction suspecte de $625,000 et contenait un lien vers un exécutable malveillant : `http://107.175.247.199/loader/install.exe`.  
+Le message prétendait signaler une transaction suspecte de $625.000 et contenait un lien vers un exécutable malveillant : `http://107.175.247.199/loader/install.exe`.  
 
   L'exécution du fichier permettrait :  
   - **BitRAT** : Accès distant complet, keylogging, persistence via registry  
@@ -39,10 +39,10 @@ Ces échecs combinés confirment que l'e-mail est spoofed et qu'il aurait dû ê
 
 ### Sophistication de l'Attaque
 
-  - **Multi-malware** : Trois familles sur une seule infrastructure  
-  - **Évasion** : Sleep PowerShell 50s pour échapper aux sandboxes   
+  - **Multi-malware** : Trois familles sur une seule infrastructure (`ripley.studio`)  
+  - **Évasion** : Sleep PowerShell 50s pour échapper détection    
   - **Persistence** : Deux composants dans registry auto-run (`Jzwvix.exe` + payload)  
-  - **Résilience C2** : DDNS permettant changement d'IP dynamique  
+  - **Résilience C2** : DDNS (`gh9st.mywire.org`) permettant changement d'IP dynamique  
   - **Exfiltration furtive** : Service légitime (Telegram) difficile à bloquer  
 
 ### Actions Préventives Appliquées
@@ -50,7 +50,7 @@ Ces échecs combinés confirment que l'e-mail est spoofed et qu'il aurait dû ê
   **Blocage immédiat** :  
   - IPs malveillantes (`107.175.247.199`, `18.208.22.104`)  
   - Domaine C2 (`gh9st.mywire.org`, `*.mywire.org`)  
-  - URLs de distribution (`install.exe`, `server.exe`)  
+  - URLs de distribution (`./install.exe`, `./server.exe`)  
   - Hashes des trois familles de malware  
 
   **Mesures de protection** :  
@@ -129,9 +129,10 @@ Bien que les champs soient alignés, cet alignement ne garantit pas l'authentici
 ### Contenu
 
 Le message imite un reçu commercial avec les éléments suivants :
-- **# Référence** : #00034959
+- **Sujet** : COMMERCIAL PURCHASE RECEIPT ONLINE
+- **Référence** : 00034959
 - **Date** : 09/12/22
-- **Montant** : $625,000 pesos
+- **Montant** : $625.000 pesos
 - **Code d'accès fourni** : 8657
 
 ### URL Malveillante
@@ -183,7 +184,7 @@ http://107.175.247.199/loader/install.exe
 #### 1. CoinMiner
 - **SHA256** : `453fb1c4b3b48361fa8a67dcedf1eaec39449cb5a146a7770c63d1dc0d7562f0`
 - **Fonction** : Cryptomining (Monero)
-- **Impact** : Consommation CPU 80-100%, ralentissement système
+- **Impact** : Consommation CPU/GPU, ralentissement système
 - **URL requêtée** : `http://ripley.studio/loader/uploads/Qanjttrbv.jpeg`
 
 #### 2. BitRAT
@@ -228,7 +229,7 @@ http://107.175.247.199/loader/install.exe
 **PowerShell Sleep Command** :
 - Délai : 50 secondes
 - Objectif : Échapper aux sandboxes à timeout court
-- Commande décodée : `Start-Sleep -Seconds 50`
+- Commande décodée (base 64) : `Start-Sleep -Seconds 50`
 
 ![sleep-1](./images/sleep-1.png)
 ![sleep-2](./images/sleep-2.png)
@@ -236,14 +237,14 @@ http://107.175.247.199/loader/install.exe
 
 ### Persistence
 
-**Clé de registre modifiée** :.
+**Clé de registre modifiée** :
 ```
 HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
 Deux fichiers ajoutés pour assurer la résilience :
 1. `Jzwvix.exe` (loader de persistence)
-2. Payload BitRAT principal
+2. Payload BitRAT principal (`bf7628695c2df7a3020034a065397592a1f8850e59f9a448b555bc1c8c639539.exe`)
 
 
 
@@ -266,13 +267,25 @@ erikajohana.lopez@uptc.edu.co (usurpé)
 18.208.22.104       (SPF softfail/DKIM fail - AWS)
 107.175.247.199     (Hébergement malware - AS-COLOCROSSING)
 209.85.221.65       (Serveur Google initial)
+107.174.212.121     (gh9st.mywire.org)
 ```
 
 ### Domaines & URLs
 ```
+# ALL
 gh9st.mywire.org
 http://107.175.247.199/loader/install.exe
 http://107.175.247.199/loader/server.exe
+--------------------------------------------------------
+# BitRAT
+http://ripley.studio/loader/uploads/Hjvnp.png 
+http://ripley.studio/loader/uploads/Qanjttrbv.jpeg
+--------------------------------------------------------
+# AsyncRAT
+http://ripley.studio/loader/uploads/Zcpbmqlst.bmp 
+https://api.telegram.org/bot5610920260
+--------------------------------------------------------
+# CoinMiner
 http://ripley.studio/loader/uploads/Qanjttrbv.jpeg
 ```
 
@@ -339,7 +352,7 @@ bot5610920260 (Telegram Bot ID)
 
 **Réponse** : `18.208.22.104`
 
-**Méthode** : Analyse des headers SMTP via PhishTool. Cette IP correspond au serveur Trend Micro hébergé sur AWS (AS14618 Amazon-AES) qui a relayé le message. Les résultats d'authentification montrent clairement SPF=softfail et DKIM=fail pour cette adresse.
+**Méthode** : Analyse des headers SMTP.
 
 ---
 
@@ -348,7 +361,7 @@ bot5610920260 (Telegram Bot ID)
 
 **Réponse** : `erikajohana.lopez@uptc.edu.co`
 
-**Méthode** : Extraction directe du header Return-Path. Cette adresse, bien qu'alignée avec le champ From, est usurpée comme le confirment les échecs d'authentification SPF/DKIM.
+**Méthode** : Extraction directe du header Return-Path. 
 
 ---
 
@@ -357,7 +370,7 @@ bot5610920260 (Telegram Bot ID)
 
 **Réponse** : `107.175.247.199`
 
-**Méthode** : Extraction de l'URL malveillante dans le corps du message (`http://107.175.247.199/loader/install.exe`). Vérification via URLhaus et VirusTotal confirme que cette IP héberge plusieurs familles de malware.
+**Méthode** : Vérification via VirusTotal confirme que cette IP héberge plusieurs familles de malware.
 
 ---
 
@@ -377,23 +390,28 @@ bot5610920260 (Telegram Bot ID)
 
 **Méthode** : Analyse du hash SHA256 du malware CoinMiner (`453fb1c4b3b48361fa8a67dcedf1eaec39449cb5a146a7770c63d1dc0d7562f0`) sur VirusTotal. L'onglet Relations révèle les URLs contactées par ce malware, incluant cette ressource utilisée pour télécharger des composants additionnels ou configurations.
 
+![question-5](./images/question-5.png)
+
 ---
 
 ### Question 6
-**Quel est le nom de l'exécutable dans la première valeur ajoutée à la clé de registre auto-run ?**
+**En se basant sur l'analyse du BitRAT, quel est le nom de l'exécutable dans la première valeur ajoutée à la clé de registre auto-run ?**
 
 **Réponse** : `Jzwvix.exe`
 
-**Méthode** : Analyse dynamique du malware BitRAT via Joe Sandbox et ANY.RUN. Observation des modifications de registre dans `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`. Le premier fichier ajouté est Jzwvix.exe, agissant comme loader de persistence.
+**Méthode** : Analyse dynamique du malware BitRAT via Joe Sandbox. Observation des modifications de registre dans `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`. Le premier fichier ajouté est `Jzwvix.exe`, agissant comme loader de persistence.
+
+![question-6](./images/question-6.png)
+
 
 ---
 
 ### Question 7
-**Quel est le hash SHA-256 du fichier téléchargé et ajouté aux clés autorun ?**
+**En se basant sur l'analyse du BitRAT, quel est le hash SHA-256 du fichier téléchargé et ajouté aux clés autorun ?**
 
 **Réponse** : `bf7628695c2df7a3020034a065397592a1f8850e59f9a448b555bc1c8c639539`
 
-**Méthode** : Soumission de l'échantillon BitRAT à MalwareBazaar avec recherche du hash. Corrélation avec l'analyse sandbox (ANY.RUN/Joe Sandbox) confirmant qu'il s'agit du second fichier ajouté aux clés de registre auto-run, constituant le payload principal de BitRAT.
+**Méthode** : Soumission de l'échantillon BitRAT à MalwareBazaar avec recherche du hash. Corrélation avec l'analyse sandbox (JoeSandbox) confirmant qu'il s'agit du second fichier ajouté aux clés de registre auto-run, constituant le payload principal de BitRAT.
 
 ---
 
@@ -402,7 +420,9 @@ bot5610920260 (Telegram Bot ID)
 
 **Réponse** : `http://107.175.247.199/loader/server.exe`
 
-**Méthode** : Analyse des requêtes HTTP dans ANY.RUN. Après l'exécution de `install.exe` (loader initial), observation d'une requête HTTP GET vers cette URL pour télécharger le payload BitRAT principal.
+**Méthode** : Analyse des requêtes HTTP dans [Tria.ge](https://tria.ge/221026-gxvytsehdp/behavioral1). Après l'exécution de `install.exe` (loader initial), observation d'une requête HTTP GET vers cette URL pour télécharger le payload BitRAT principal.  
+
+![question-8](./images/question-8.png)
 
 ---
 
@@ -413,6 +433,9 @@ bot5610920260 (Telegram Bot ID)
 
 **Méthode** : Extraction du code PowerShell encodé en Base64 depuis l'analyse sandbox. Décodage via CyberChef révèle la commande `Start-Sleep -Seconds 50`, technique d'évasion pour échapper aux sandboxes à timeout court.
 
+![sleep-1](./images/sleep-1.png)
+![sleep-2](./images/sleep-2.png)
+
 ---
 
 ### Question 10
@@ -420,7 +443,9 @@ bot5610920260 (Telegram Bot ID)
 
 **Réponse** : `gh9st.mywire.org`
 
-**Méthode** : Analyse des requêtes DNS dans ANY.RUN durant l'exécution de BitRAT. Le malware effectue des résolutions DNS vers ce domaine DDNS (Dynamic DNS) pour établir la communication avec le serveur Command & Control de l'attaquant.
+**Méthode** : Analyse des requêtes DNS dans le rapport [`Tria.ge`](https://tria.ge/221026-gxvytsehdp) lors de l'exécution du BitRAT. Le domaine DDNS `gh9st.mywire.org` résout vers une IP différente (`107.174.212.121`) suggérant un C2 dynamique.  
+
+![gh9st](./images/gh9st.png)
 
 ---
 
@@ -432,7 +457,7 @@ bot5610920260 (Telegram Bot ID)
 **Méthode** : Analyse réseau détaillée de l'échantillon AsyncRAT via Tria.ge. La section Network du rapport révèle des connexions HTTPS POST vers `api.telegram.org` avec ce Bot ID spécifique utilisé pour exfiltrer les données volées via l'API Telegram.
 
 
-
+![telegram-bot](./images/telegram-bot.png)
 
 
 
@@ -445,13 +470,11 @@ bot5610920260 (Telegram Bot ID)
 
 | Catégorie | Outil | Usage |
 |-----------|-------|-------|
-| Email Analysis | PhishTool | Headers SMTP, authentification |
 | Email Analysis | Thunderbird | Visualisation message |
 | Threat Intel | URLhaus | Identification malware families |
 | Threat Intel | MalwareBazaar | Recherche hashes |
 | Threat Intel | VirusTotal | Réputation IP/URL/fichiers |
 | Sandbox | Joe Sandbox | Analyse BitRAT |
-| Sandbox | ANY.RUN | HTTP/DNS requests |
 | Sandbox | Tria.ge | Network analysis AsyncRAT |
 | Deobfuscation | CyberChef | Décodage PowerShell |
 | Framework | MITRE ATT&CK | Mapping techniques |
@@ -466,7 +489,6 @@ bot5610920260 (Telegram Bot ID)
 ---
 
 ## 10. 📊 Références
-
 **Source du cas** : [CyberDefenders - PhishStrike Challenge](https://cyberdefenders.org/blueteam-ctf-challenges/phishstrike/)
 
 **Documentation malware** :
@@ -488,6 +510,6 @@ bot5610920260 (Telegram Bot ID)
 
 > ⚠️ **Disclaimer :** Ce document est à but éducatif. Ne manipulez pas d’artefacts malveillants sur des machines non isolées. Toutes les actions actives (HEAD, expansion d’URL, exécution de pièces jointes) doivent être faites dans une VM/sandbox isolée.
 
-*Dernière modification : 22 octobre 2025*
+*Dernière modification : 23 octobre 2025*
 
 
