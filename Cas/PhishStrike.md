@@ -1,4 +1,4 @@
-<img width="1252" height="813" alt="image" src="https://github.com/user-attachments/assets/bf52247e-535f-4fa0-802a-884eeb890972" /># 🐟 Rapport d'Incident - PhishStrike
+# 🐟 Rapport d'Incident - PhishStrike
 
 > 💡 Analyse d'une campagne de phishing multi-malware ciblant une institution éducative (*Universidad Pedagógica y Tecnológica de Colombia*).  
 
