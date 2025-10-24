@@ -145,8 +145,12 @@ http://107.175.247.199/loader/install.exe
 |----------|--------|
 | Type | Exécutable Windows (.exe) |
 | IP hébergement | `107.175.247.199` |
-| ASN | AS-COLOCROSSING |
+| ASN | AS36352 AS-COLOCROSSING |
 | Port | 80 (HTTP non sécurisé) |
+
+![domaintools-1](./images/domaintools-1.png)
+
+
 
 ### Techniques d'Ingénierie Sociale
 
@@ -471,6 +475,7 @@ bot5610920260 (Telegram Bot ID)
 | Catégorie | Outil | Usage |
 |-----------|-------|-------|
 | Email Analysis | Thunderbird | Visualisation message |
+| Email Analysis | DomainTools | WHOIS enrichi, ASN, géolocalisation |
 | Threat Intel | URLhaus | Identification malware families |
 | Threat Intel | MalwareBazaar | Recherche hashes |
 | Threat Intel | VirusTotal | Réputation IP/URL/fichiers |
