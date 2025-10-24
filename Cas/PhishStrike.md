@@ -39,10 +39,16 @@ Le 9 décembre 2022, une alerte de sécurité a signalé un e-mail de phishing c
 
 Le message prétendait signaler une transaction suspecte de $625.000 et contenait un lien vers un exécutable malveillant : `http://107.175.247.199/loader/install.exe`.  
 
-  L'exécution du fichier permettrait :  
-  - **BitRAT** : Accès distant complet, keylogging, persistence via registry  
-  - **AsyncRAT** : Exfiltration de credentials via Telegram  
-  - **CoinMiner** : Utilisation CPU/GPU pour minage de cryptomonnaie  
+**Chaîne d'infection multi-étapes :**  
+L'exécution du fichier `install.exe` (loader initial) déclenche une séquence d'infection en cascade :  
+- Étape 1 : Le loader `install.exe` s'exécute et contacte le serveur C2  
+- Étape 2 : Téléchargement du payload secondaire `server.exe` depuis `http://107.175.247.199/loader/server.exe` 
+- Étape 3 : Déploiement de 3 types de malware :  
+  - `BitRAT` : Remote Access Trojan avec accès distant complet, keylogging, persistence via registry  
+  - `AsyncRAT` : RAT avec exfiltration de credentials via Telegram Bot API  
+  - `CoinMiner` : Exploitation CPU/GPU pour minage de cryptomonnaie (Monero)  
+ 
+> 💡 Cette architecture en plusieurs étapes permet à l'attaquant de contourner les détections antivirus statiques et de maintenir une flexibilité opérationnelle en mettant à jour les payloads finaux sans redistribuer le loader initial. 
 
 
 ### Analyse de la Menace  
@@ -82,7 +88,7 @@ Ces échecs combinés confirment que l'e-mail est spoofed et qu'il aurait dû ê
   - Mise en place d'une politique DMARC stricte (`p=reject`) afin de bloquer automatiquement les e-mails spoofed  
   - Quarantaine des e-mails similaires  
   - Mise à jour signatures EDR/antivirus  
-  - Surveillance renforcée activée (30 jours)  
+  - Surveillance +++ (30 jours)  
   
 **✅ Résultat** : Menace neutralisée avant exécution.  
 
@@ -117,7 +123,7 @@ Microsoft Exchange Online
 Google Workspace (fsfb.org.co)
 ```
 
-> 💡 Observation : La présence de multiples fournisseurs (Google, AWS, Microsoft) dans le flux d'envoi est inhabituelle pour une communication directe entre institutions éducatives et constitue un indicateur de message falsifié.  
+> 🚩 Observation : La présence de multiples fournisseurs (Google, AWS, Microsoft) dans le flux d'envoi est inhabituelle pour une communication directe entre institutions éducatives et constitue un indicateur de message falsifié.  
 
 ### Résultats d'Authentification  
 
