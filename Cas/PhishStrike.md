@@ -353,19 +353,20 @@ bot5610920260 (Telegram Bot ID)
 
 | Tactic | Technique | ID | Détails |
 |--------|-----------|-----|---------|
-| Initial Access | Spearphishing Link | T1566.002 | Lien malveillant dans e-mail |
-| Execution | User Execution | T1204.001 | Téléchargement et exécution par l'utilisateur |
-| Execution | PowerShell | T1059.001 | Sleep 50s pour évasion |
-| Persistence | Registry Run Keys | T1547.001 | Modification HKCU\Run |
-| Defense Evasion | Virtualization/Sandbox Evasion | T1497.003 | Délai 50s |
-| Defense Evasion | Obfuscated Files | T1027 | PowerShell base64, faux .jpeg |
-| Credential Access | Input Capture | T1056.001 | Keylogging (BitRAT/AsyncRAT) |
-| Discovery | System Information Discovery | T1082 | Collecte infos système |
-| Collection | Data from Local System | T1005 | Exfiltration fichiers |
-| Command and Control | Dynamic Resolution | T1568.002 | DDNS (mywire.org) |
-| Command and Control | Web Service | T1102 | Telegram API abusée |
-| Exfiltration | Exfiltration Over Web Service | T1567.002 | Telegram Bot |
-| Impact | Resource Hijacking | T1496 | Cryptomining |
+| Initial Access | Spearphishing Link | [T1566.002](https://attack.mitre.org/techniques/T1566/002/) | Lien malveillant dans e-mail |
+| Execution | User Execution | [T1204.001](https://attack.mitre.org/techniques/T1204/001/) | Téléchargement et exécution par l'utilisateur |
+| Execution | PowerShell | [T1059.001](https://attack.mitre.org/techniques/T1059/001/) | Sleep 50s pour évasion |
+| Persistence | Registry Run Keys | [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | Modification HKCU\Run |
+| Defense Evasion | Virtualization/Sandbox Evasion | [T1497.003](https://attack.mitre.org/techniques/T1497/003/) | Délai 50s |
+| Defense Evasion | Obfuscated Files | [T1027](https://attack.mitre.org/techniques/T1027/) | PowerShell encodé base64 |
+| Credential Access | Input Capture | [T1056.001](https://attack.mitre.org/techniques/T1056/001/) | Keylogging (`BitRAT`/`AsyncRAT`) |
+| Discovery | System Information Discovery | [T1082](https://attack.mitre.org/techniques/T1082/) | Collecte infos système |
+| Collection | Data from Local System | [T1005](https://attack.mitre.org/techniques/T1005/) | Exfiltration fichiers |
+| Command and Control | Dynamic Resolution | [T1568.002](https://attack.mitre.org/techniques/T1568/002/) | DDNS (`mywire.org`) |
+| Command and Control | Web Service | [T1102](https://attack.mitre.org/techniques/T1102/) | Telegram API abusée |
+| Exfiltration | Exfiltration Over Web Service | [T1567.002](https://attack.mitre.org/techniques/T1567/002/) | Telegram Bot |
+| Impact | Resource Hijacking | [T1496](https://attack.mitre.org/techniques/T1496/) | Cryptomining (`CoinMiner`) |
+
 
 
 
