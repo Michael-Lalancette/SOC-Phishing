@@ -78,7 +78,7 @@ Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de dével
 
 | Cas | Date | Type | Vecteur | Statut |
 |-----|------|------|---------|--------|
-| [PhishStrike](Cas/PhishStrike/) | Oct 2025 | Multi-malware (BitRAT/AsyncRAT/CoinMiner) | Faux invoice (Lien malveillant - loader) | ✅ Complété |
+| [PhishStrike](Cas/PhishStrike.md/) | Oct 2025 | Multi-malware (BitRAT/AsyncRAT/CoinMiner) | Faux invoice (Lien malveillant - loader) | ✅ Complété |
 
 *(Le catalogue s'enrichira régulièrement au fur et à mesure des analyses.)*
 
