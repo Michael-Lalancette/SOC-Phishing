@@ -541,6 +541,6 @@ Le premier fichier ajouté est `Jzwvix.exe`, agissant comme loader de persistenc
 
 > ⚠️ **Disclaimer :** Ce document est à but éducatif. Ne manipulez pas d’artefacts malveillants sur des machines non isolées. Toutes les actions actives (HEAD, expansion d’URL, exécution de pièces jointes) doivent être faites dans une VM/sandbox isolée.  
 
-*Dernière modification : 23 octobre 2025*  
+*Dernière modification : 24 octobre 2025*  
 
 
