@@ -4,6 +4,31 @@
 
 ![thunderbird-1](./images/thunderbird-1.png)  
 
+
+
+
+
+---
+
+## 📑 Table des Matières
+
+1. [📌 Résumé Exécutif](#1--résumé-exécutif)
+2. [🔍 Analyse des Headers SMTP](#2--analyse-des-headers-smtp)
+3. [🔍 Analyse du Corps du Message](#3--analyse-du-corps-du-message)
+4. [🔬 Analyse Statique](#4--analyse-statique)
+5. [🔬 Analyse Dynamique (Sandbox)](#5--analyse-dynamique-sandbox)
+6. [🏷️ Indicateurs de Compromission (IoCs)](#6-️-indicateurs-de-compromission-iocs)
+7. [🧬 Mapping MITRE ATT&CK](#7--mapping-mitre-attck)
+8. [🌐 Questionnaire CyberDefenders](#8--questionnaire-cyberdefenders)
+9. [🧰 Outils Utilisés](#9--outils-utilisés)
+10. [📊 Références](#10--références)
+
+
+
+
+
+
+
 ---
 
 ## 1. 📌 Résumé Exécutif
@@ -353,7 +378,7 @@ bot5610920260 (Telegram Bot ID)
 
 ---
 
-## 8. 🌐 Réponses aux Questions d'Investigation
+## 8. 🌐 Questionnaire CyberDefenders
 
 ### Question 1
 **Quelle est l'adresse IP de l'expéditeur avec SPF softfail et DKIM fail ?**  
@@ -481,13 +506,13 @@ Le premier fichier ajouté est `Jzwvix.exe`, agissant comme loader de persistenc
 | Catégorie | Outil | Usage |
 |-----------|-------|-------|
 | Email Analysis | Thunderbird | Visualisation message |
-| Email Analysis | DomainTools | WHOIS enrichi, ASN, géolocalisation |
-| Threat Intel | URLhaus | Identification malware et hashes |
-| Threat Intel | MalwareBazaar | Identification malware et hashes |
+| Threat Intel | URLhaus | Identification malware families |
+| Threat Intel | MalwareBazaar | Recherche hashes |
 | Threat Intel | VirusTotal | Réputation IP/URL/fichiers |
-| Sandbox | Joe Sandbox | Analyse Dynamique |
-| Sandbox | Tria.ge | Analyse Dynamique |
-| Déobfuscation | CyberChef | Décodage PowerShell |
+| Sandbox | Joe Sandbox | Analyse BitRAT |
+| Sandbox | Tria.ge | Network analysis AsyncRAT |
+| Deobfuscation | CyberChef | Décodage PowerShell |
+| OSINT & Infrastructure | DomainTools | WHOIS, ASN, géolocalisation IP |
 | Framework | MITRE ATT&CK | Mapping techniques |
 
 
