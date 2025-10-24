@@ -407,7 +407,9 @@ bot5610920260 (Telegram Bot ID)
 
 **Réponse** : `Jzwvix.exe`  
 
-**Méthode** : Analyse dynamique du malware BitRAT via Joe Sandbox. Observation des modifications de registre dans `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`. Le premier fichier ajouté est `Jzwvix.exe`, agissant comme loader de persistence.  
+**Méthode** : Analyse dynamique du malware BitRAT via Joe Sandbox.  
+Observation des modifications de registre dans `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`.  
+Le premier fichier ajouté est `Jzwvix.exe`, agissant comme loader de persistence.   
 
 ![question-6](./images/question-6.png)  
 
