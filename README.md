@@ -5,6 +5,17 @@ Ce dépôt propose des exercices pratiques pour simuler des enquêtes SOC sur de
 
 ---
 
+## 📖 Guide d'Analyse
+Un guide méthodologique complet est disponible pour accompagner/guider vos investigations :  
+📘[Guide Analyse pour E-mail de Phishing](Guide-Analyse-Phishing.md)  
+
+
+
+
+
+
+---
+
 ## 🎯 Objectif 
 
 Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de développer et documenter des compétences opérationnelles en :  
