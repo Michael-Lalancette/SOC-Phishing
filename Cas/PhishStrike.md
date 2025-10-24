@@ -57,7 +57,6 @@ Ces échecs combinés confirment que l'e-mail est spoofed et qu'il aurait dû ê
   - Mise en place d'une politique DMARC stricte (`p=reject`) afin de bloquer automatiquement les e-mails spoofed  
   - Quarantaine des e-mails similaires  
   - Mise à jour signatures EDR/antivirus  
-  - Scan préventif du parc informatique  
   - Surveillance renforcée activée (30 jours)  
   
 **✅ Résultat** : Menace neutralisée avant exécution.  
