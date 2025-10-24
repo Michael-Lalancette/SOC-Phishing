@@ -19,13 +19,13 @@ Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de dével
 > Expansion des URLs (shorteners), inspection des redirections, analyse des pages de phishing, extraction des artefacts liés et cartographie de la chaîne d'attaque.  
 
 #### 📎 **Gestion des pièces jointes**
-> Identification du type réel (file signature), calcul des hachages (SHA256/MD5), analyse statique (macros, scripts) et dynamique en environnement isolé (sandbox).  
+> Identification du type réel (file signature), calcul des hashes (SHA256/MD5), analyse statique (macros, scripts) et dynamique en environnement isolé (sandbox).  
 
 #### 🎯 **Contextualisation tactique**
-> Corrélation des observables avec le framework **MITRE ATT&CK** pour classifier les TTPs (Tactics, Techniques, Procedures) et prioriser les réponses incident.  
+> Corrélation des observables avec le framework **MITRE ATT&CK** pour classifier les TTPs (Tactics, Techniques, Procedures).  
 
 #### 📝 **Production opérationnelle**
-> Rédaction de rapports d'incident structurés et actionnables, documentation des IoCs (Indicators of Compromise), recommandations de mitigation immédiates (blocage, règles EDR/SIEM, quarantaine) et partage de threat intelligence.  
+> Rédaction de rapports d'incident structurés et actionnables, documentation des IOCs (Indicators of Compromise), recommandations de mitigation immédiates (blocage, règles EDR/SIEM, quarantaine).  
 
 ---
 
@@ -38,10 +38,10 @@ Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de dével
 #### 🔬 Analyse dynamique
 - **[Any.Run](https://any.run/)**
   > Sandbox interactive pour observer en temps réel le comportement des fichiers et liens malveillants  
-- **[Hybrid Analysis](https://www.hybrid-analysis.com/)**
-  > Sandbox multi-moteurs pour analyse comportementale approfondie  
 - **[Joe Sandbox](https://www.joesandbox.com/)**
-  > Plateforme d'analyse automatisée avancée avec détection comportementale approfondie et rapports détaillés  
+  > Plateforme d'analyse automatisée avancée avec détection comportementale approfondie et rapports détaillés
+- **[Tria.ge](https://tria.ge/)**
+  > Service cloud d’analyse rapide orienté détection de RATs, stealers et extraction automatique d’IOCs.  
 
 #### 🧠 Threat Intelligence et réputation
 - **[VirusTotal](https://www.virustotal.com/gui/home/url)**
@@ -62,12 +62,10 @@ Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de dével
 #### 📊 Frameworks et référentiels
 - **[MITRE ATT&CK](https://attack.mitre.org/)**
   > Référentiel des tactiques, techniques et procédures (TTP) pour contextualiser les observables et mapper les attaques  
-- **[MISP](https://www.misp-project.org/)**
-  > Plateforme de partage de threat intelligence (optionnel pour corrélation avancée)  
 
 #### 🔎 OSINT et investigation
-- **[MXToolbox](https://mxtoolbox.com/)**
-  > Vérification DNS, headers SMTP, SPF/DKIM/DMARC et blacklists  
++ **[DomainTools](https://whois.domaintools.com/)**
++   > WHOIS enrichi, historique DNS, identification ASN et géolocalisation IP
 - **[urlscan.io](https://urlscan.io/)**
   > Capture et analyse automatisée de pages web suspectes  
 - **[SecurityTrails](https://securitytrails.com/)**
@@ -75,23 +73,6 @@ Simuler des enquêtes SOC centrées sur des e‑mails de phishing afin de dével
 - **[Shodan](https://www.shodan.io/)**
   > Recherche sur l'infrastructure exposée (serveurs, services)  
 
----
-
-## 📂 Structure du dépôt
-
-```
-SOC-Phishing/
-├── README.md                    # Ce fichier
-├── Guide-Analyse-Phishing.md    # Méthodologie complète d'analyse
-├── Templates/                   # Modèles de rapports et checklists
-│   ├── Rapport-Template.md
-├── Cas/                         # Études de cas
-│   ├── PhishStrike/
-│   │   ├── README.md            # Rapport d'analyse
-│   │   ├── RAPPORT.md           # Rapport SOC
-│   │   └── images/              # Répertoire d'images
-│   └── [Futurs cas...]
-```
 
 ---
 
@@ -108,7 +89,7 @@ SOC-Phishing/
 ---
 
 #### ⚠️ Disclaimer
-> Ce laboratoire est uniquement destiné à des fins éducatives et de formation. Ne reproduisez pas ces techniques sur des systèmes en production ou sans autorisation explicite. Tous les fichiers, liens et artefacts doivent être manipulés dans un environnement isolé et sécurisé.
+> Ce dépôt est uniquement destiné à des fins éducatives et de formation. Ne reproduisez pas ces techniques sur des systèmes en production ou sans autorisation explicite. Tous les fichiers, liens et artefacts doivent être manipulés dans un environnement isolé et sécurisé.
 
 ---
 
